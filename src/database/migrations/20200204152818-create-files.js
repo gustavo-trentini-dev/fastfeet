@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('recipients', {
+    return queryInterface.createTable('files', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -10,25 +10,11 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
+      },
+      path: {
+        type: Sequelize.STRING,
+        allowNull: false,
         unique: true,
-      },
-      post_code: {
-        type: Sequelize.STRING(9),
-        allowNull: false,
-      },
-      state: {
-        type: Sequelize.STRING(2),
-        allowNull: false,
-      },
-      street: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      number: {
-        type: Sequelize.STRING,
-      },
-      complement: {
-        type: Sequelize.STRING,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -42,10 +28,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface
-      .removeColumn('deliveries', 'recipient_id')
-      .then(() => {
-        return queryInterface.dropTable('recipients');
-      });
+    return queryInterface.dropTable('files');
   },
 };

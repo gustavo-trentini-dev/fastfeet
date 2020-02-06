@@ -1,15 +1,11 @@
 import Sequelize, { Model } from 'sequelize';
 
-class Recipient extends Model {
+class Deliveryman extends Model {
   static init(sequelize) {
     super.init(
       {
         name: Sequelize.STRING,
-        post_code: Sequelize.STRING,
-        state: Sequelize.STRING,
-        street: Sequelize.STRING,
-        number: Sequelize.STRING,
-        complement: Sequelize.STRING,
+        email: Sequelize.STRING,
       },
       {
         sequelize,
@@ -24,4 +20,4 @@ class Recipient extends Model {
   }
 }
 
-export default Recipient;
+export default Deliveryman;

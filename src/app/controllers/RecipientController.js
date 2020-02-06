@@ -38,6 +38,7 @@ class RecipientController {
       street,
       number,
       complement,
+      avatar_id,
     } = await Recipient.create(req.body);
 
     return res.json({
@@ -48,6 +49,7 @@ class RecipientController {
       street,
       number,
       complement,
+      avatar_id,
     });
   }
 
