@@ -6,9 +6,23 @@ import Recipient from '../models/Recipient';
 import DeliveryMail from '../jobs/DeliveryMail';
 import Queue from '../../lib/Queue';
 
-class OrderController {
+class DeliveryController {
   async index(req, res) {
-    const deliveries = await Delivery.findAll();
+    const deliveries = await Delivery.findAll({
+      attributes: ['product'],
+      include: [
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: ['name', 'street', 'number', 'complement', 'post_code'],
+        },
+        {
+          model: Deliveryman,
+          as: 'deliveryman',
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
 
     return res.json(deliveries);
   }
@@ -95,19 +109,31 @@ class OrderController {
 
   async delete(req, res) {
     const delivery = await Delivery.findByPk(req.params.id, {
+      attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
       include: [
         {
           model: Deliveryman,
           as: 'deliveryman',
-          attributes: ['name', 'email'],
+          attributes: ['id', 'name', 'email'],
         },
         {
           model: Recipient,
           as: 'recipient',
-          attributes: ['id', 'name'],
+          attributes: [
+            'id',
+            'name',
+            'street',
+            'number',
+            'complement',
+            'post_code',
+          ],
         },
       ],
     });
+
+    if (delivery.canceled_at) {
+      return res.status(400).json({ error: 'Delivery already canceled' });
+    }
 
     delivery.canceled_at = new Date();
 
@@ -117,4 +143,4 @@ class OrderController {
   }
 }
 
-export default new OrderController();
+export default new DeliveryController();
